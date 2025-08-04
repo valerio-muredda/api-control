@@ -7,7 +7,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: api-stress-tester-html
-  namespace: api-stress-tester
+  namespace: default
 data:
   index.html: |
     <!DOCTYPE html>

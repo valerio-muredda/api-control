@@ -4,13 +4,10 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: api-stress-tester-route
-  namespace: api-stress-tester
+  namespace: default
 spec:
   to:
     kind: Service
     name: api-stress-tester-service
   port:
-    targetPort: http
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
+    targetPort: 8080

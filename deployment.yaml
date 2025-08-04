@@ -5,7 +5,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-stress-tester-deployment
-  namespace: api-stress-tester
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -16,10 +16,10 @@ spec:
       labels:
         app: api-stress-tester
     spec:
-      serviceAccountName: api-stress-tester-sa
       containers:
       - name: api-stress-tester
         image: nginx:latest
+        serviceAccountName: default
         ports:
         - containerPort: 8080
           name: http
@@ -27,16 +27,19 @@ spec:
         - name: html-volume
           mountPath: /usr/share/nginx/html/index.html
           subPath: index.html
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
+        ###
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        ###
       volumes:
       - name: html-volume
         configMap:
           name: api-stress-tester-html
+      # Add the nginx config volume
+      - name: nginx-config-volume
+        configMap:
+          name: api-stress-tester-nginx-config
+      - name: temp-volume
+        emptyDir: {}
 ---
