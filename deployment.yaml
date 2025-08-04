@@ -1,0 +1,42 @@
+# This deployment creates a single pod running an nginx server.
+# The ConfigMap is mounted into the Pod to serve the HTML file.
+# -----------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-stress-tester-deployment
+  namespace: api-stress-tester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-stress-tester
+  template:
+    metadata:
+      labels:
+        app: api-stress-tester
+    spec:
+      serviceAccountName: api-stress-tester-sa
+      containers:
+      - name: api-stress-tester
+        image: nginx:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - name: html-volume
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+      volumes:
+      - name: html-volume
+        configMap:
+          name: api-stress-tester-html
+---

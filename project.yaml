@@ -1,0 +1,6 @@
+apiVersion: project.openshift.io/v1
+kind: Project
+metadata:
+  name: api-stress-tester
+  annotations:
+    openshift.io/display-name: "API Stress Tester"

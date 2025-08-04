@@ -1,0 +1,16 @@
+# This Route exposes the Service to the outside world via a public URL.
+# -----------------------------------------------------------------------------
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: api-stress-tester-route
+  namespace: api-stress-tester
+spec:
+  to:
+    kind: Service
+    name: api-stress-tester-service
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
